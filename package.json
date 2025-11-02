@@ -1,0 +1,37 @@
+{
+  "name": "geidea",
+  "version": "1.5.7",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+
+  "build": {
+    "appId": "com.geidea.own",
+    "win": {
+      "icon": "./geid.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+
+  "author": "georgewu",
+  "license": "ISC",
+  "description": "This is GEIDEA",
+  "devDependencies": {
+    "electron": "^34.1.0",
+    "electron-builder": "^25.1.8"
+  }
+}

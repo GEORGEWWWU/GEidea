@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="short icon" href="./geid.png">
+    <link rel="stylesheet" href="./libs/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/todolist.css">
+    <title>GE简主义</title>
+</head>
+<body>
+    
+    <!--大标题-->
+    <section>
+        <h1>待办清单</h1>
+        <button id="toggle-add"><p id="get-date"></p> <span id="">DOIT</span></button>
+    </section>
+
+    <main>
+        <!--添加框和button-->
+        <div class="m-add" style="display: none;">
+            <input class="inputdate" type="text" placeholder="日期">
+            <input class="inputthings" type="text" placeholder="事件">
+            <button id="add-event">添加</button>
+        </div>
+
+        <!--todolist-->
+        <div class="m-todolist">
+            <!--事件-->
+            <!-- <div class="todo">
+                <div class="todo-date">2025年3月13日</div>
+                <div class="todo-things">报名国家普通话水平测试</div>
+                <button class="delete-btn">删除</button>
+            </div> -->
+        </div>
+    </main>
+
+    <script>
+        // 获取当前日期
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，需要加1
+        const day = String(date.getDate()).padStart(2, '0');
+
+        // 格式化日期为XXXX年XX月XX日
+        const formattedDate = `${year}年${month}月${day}日`;
+
+        // 将格式化后的日期显示在id为get-date的<p>标签内
+        document.getElementById('get-date').textContent = formattedDate;
+
+        // 添加事件监听器，点击section里的按钮显示m-add
+        document.getElementById('toggle-add').addEventListener('click', function() {
+            const addSection = document.querySelector('.m-add');
+            if (addSection.style.display === 'none' || addSection.style.display === '') {
+                addSection.style.display = 'flex';
+            } else {
+                addSection.style.display = 'none';
+            }
+        });
+
+        // 从 localStorage 中读取事件数据并显示在页面上
+        function loadTodos() {
+            const todoList = document.querySelector('.m-todolist');
+            const storedTodos = JSON.parse(localStorage.getItem('todos')) || [];
+
+            storedTodos.forEach(todo => {
+                const newTodo = document.createElement('div');
+                newTodo.className = 'todo';
+
+                const todoDate = document.createElement('div');
+                todoDate.className = 'todo-date';
+                todoDate.textContent = todo.date;
+
+                const todoThings = document.createElement('div');
+                todoThings.className = 'todo-things';
+                todoThings.textContent = todo.things;
+
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'delete-btn';
+                deleteButton.textContent = '✓';
+
+                newTodo.appendChild(todoDate);
+                newTodo.appendChild(todoThings);
+                newTodo.appendChild(deleteButton);
+
+                todoList.appendChild(newTodo);
+            });
+        }
+
+        // 将事件数据保存到 localStorage 中
+        function saveTodos() {
+            const todos = Array.from(document.querySelectorAll('.todo')).map(todo => ({
+                date: todo.querySelector('.todo-date').textContent,
+                things: todo.querySelector('.todo-things').textContent
+            }));
+            localStorage.setItem('todos', JSON.stringify(todos));
+        }
+
+        // 页面加载时加载事件数据
+        window.addEventListener('load', loadTodos);
+
+        // 添加事件监听器，点击添加按钮将输入框的值添加到 m-todolist 中
+        document.getElementById('add-event').addEventListener('click', function() {
+            const inputDate = document.querySelector('.inputdate').value;
+            const inputThings = document.querySelector('.inputthings').value;
+
+            if (inputDate && inputThings) {
+                const todoList = document.querySelector('.m-todolist');
+                const newTodo = document.createElement('div');
+                newTodo.className = 'todo';
+
+                const todoDate = document.createElement('div');
+                todoDate.className = 'todo-date';
+                todoDate.textContent = inputDate;
+
+                const todoThings = document.createElement('div');
+                todoThings.className = 'todo-things';
+                todoThings.textContent = inputThings;
+
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'delete-btn';
+                deleteButton.textContent = '✓';
+
+                newTodo.appendChild(todoDate);
+                newTodo.appendChild(todoThings);
+                newTodo.appendChild(deleteButton);
+
+                todoList.appendChild(newTodo);
+
+                // 清空输入框
+                document.querySelector('.inputdate').value = '';
+                document.querySelector('.inputthings').value = '';
+
+                // 隐藏添加框
+                document.querySelector('.m-add').style.display = 'none';
+
+                // 保存事件数据到 localStorage
+                saveTodos();
+            }
+        });
+
+        // 添加事件监听器，点击删除按钮删除对应的 todo 项
+        document.addEventListener('click', function(event) {
+            if (event.target && event.target.className === 'delete-btn') {
+                event.target.parentElement.remove();
+                // 更新 localStorage 中的数据
+                saveTodos();
+            }
+        });
+    </script>
+</body>
+</html>

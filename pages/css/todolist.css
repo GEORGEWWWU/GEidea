@@ -1,0 +1,250 @@
+
+* {
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-family: 'fz-ios';
+}
+
+/* 隐藏滚动条 */
+::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    width: 100%;
+    height: 600px;
+    display: grid;
+    justify-items: center;
+    align-content: flex-start;
+    background-color: #171717c1;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+section {
+    width: 500px;
+    height: auto;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    position: fixed !important;
+    top: 0;
+    z-index: 9999;
+}
+
+section h1 {
+    font-size: 18px;
+    color: #dfdfdf;
+    margin-top: 22px;
+    user-select: none;
+}
+
+section button {
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    margin-top: 8px;
+    cursor: pointer;
+}
+
+section button p {
+    font-size: 14px;
+    color: #8f8f8fdb;
+    user-select: none;
+    font-weight: 700;
+    transition: all 0.1s ease 0s;
+}
+
+section button span {
+    font-size: 9px;
+    color: #e77523;
+    user-select: none;
+    font-weight: 700;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #b35511;
+    padding: 1px 4px;
+    transition: all 0.1s ease 0s;
+}
+
+section button:hover p {
+    color: #c1c1c1d8;
+}
+
+
+
+
+
+
+
+
+main {
+    width: 500px;
+    height: auto;
+    margin-top: 95px;
+    display: grid;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.m-add {
+    width: 500px;
+    height: auto;
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+    gap: 15px;
+    background: #444444;
+    padding: 13px 15px;
+    border-radius: 3px;
+    animation: maddshow 0.5s ease forwards;
+}
+
+@keyframes maddshow {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.inputdate {
+    width: 22.5%;
+    height: 30px;
+    outline: none;
+    background: none;
+    padding: 1px 0 1px 8px;
+    color: #dfdfdf;
+    border-bottom-style: solid;
+    border-width: 1px;
+    border-color: #9c9c9c9d;
+}
+
+.inputdate:hover {
+    border-color: #9c9c9c;
+}
+
+.inputthings {
+    width: 65%;
+    height: 30px;
+    outline: none;
+    background: none;
+    padding: 1px 0 1px 8px;
+    color: #dfdfdf;
+    border-bottom-style: solid;
+    border-width: 1px;
+    border-color: #9c9c9c9d;
+    transition: all 0.2s ease 0s;
+}
+
+.inputthings:hover {
+    border-color: #9c9c9c;
+}
+
+.inputthings:focus {
+    width: 80%;
+}
+
+.m-add button {
+    width: 12.5%;
+    background: none;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #9c9c9c;
+    color: #9c9c9c;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+.m-todolist {
+    width: 100%;
+    height: auto;
+    display: grid;
+    justify-items: center;
+    align-items: flex-start;
+    background: none;
+    margin-top: 13px;
+    gap: 13px;
+}
+
+.todo {
+    width: 500px;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    background: #ca5c0e4c;
+    padding: 8px 15px;
+    border-radius: 5px;
+}
+
+.todo-date {
+    width: 22.5%;
+    height: 30px;
+    background: none;
+    padding: 1px 0 1px 8px;
+    color: #dfdfdf;
+    font-size: 14px;
+    user-select: none;
+    display: flex;
+    flex-direction: row;
+    justify-items: left;
+    align-items: center;
+}
+
+.todo-things {
+    width: 65%;
+    height: 30px;
+    background: none;
+    padding: 1px 0 1px 8px;
+    color: #dfdfdf;
+    font-size: 14px;
+    user-select: none;
+    display: flex;
+    flex-direction: row;
+    justify-items: left;
+    align-items: center;
+}
+
+.todo button {
+    width: 12.5%;
+    height: 25px;
+    background: none;
+    color: #9c9c9cd0;
+    cursor: pointer;
+}
+
+@keyframes slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-in {
+    animation: slide-in 0.5s ease-in-out;
+}

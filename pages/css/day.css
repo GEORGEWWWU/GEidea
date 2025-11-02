@@ -1,0 +1,98 @@
+* {
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-family: 'fz-ios';
+}
+
+/* 隐藏滚动条 */
+::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    width: 300px;
+    height: 250px;
+    display: grid;
+    justify-items: center;
+    align-content: flex-start;
+    background: #1b1b1b;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.ctn {
+    width: 300px;
+    height: 200px;
+    display: grid;
+    justify-items: center;
+    align-content: flex-start;
+    background: #1e1e1e;
+}
+
+.ctn h1 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #e4e4e4e2;
+    margin-top: 10px;
+    user-select: none;
+}
+
+.ctn span {
+    font-size: 24px;
+    transform: translateY(-1px);
+    user-select: none;
+    font-weight: 700;
+    color: #c46322b0;
+}
+
+.ctn-2026 {
+    width: 250px;
+    height: 32px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    justify-content: left;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.ctn-2026 p {
+    font-size: 15px;
+    color: #e4e4e467;
+    user-select: none;
+}
+
+.ctn-birthday {
+    width: 250px;
+    height: 32px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    justify-content: left;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.ctn-birthday p {
+    font-size: 15px;
+    color: #e4e4e467;
+    user-select: none;
+}
+
+.ctn-alive {
+    width: 250px;
+    height: 32px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    justify-content: left;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.ctn-alive p {
+    font-size: 15px;
+    color: #e4e4e467;
+    user-select: none;
+}

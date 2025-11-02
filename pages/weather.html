@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="short icon" href="./geid.png">
+    <link rel="stylesheet" href="./libs/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/wrt.css">
+    <title>GE简主义</title>
+</head>
+<body>
+    <div class="weather-container">
+        <img id="weather-icon" src="./imgs/icon/多云.png" alt="天气图标" class="weather-icon">
+        <div class="weather-info" id="weather-state">加载中...</div>
+        <div class="weather-temp" id="temperature">--°C</div>
+    </div>
+    <div id="loading" class="loading">获取天气信息中...</div>
+
+    <script>
+        const PRIVATE_KEY = 'SVImo7IpupSlpR-iS'; // 私钥
+        const PUBLIC_KEY = 'Pua7Jvc3fcPDAtUR7';   // 公钥
+
+        // 按需引入 crypto 库
+        if (typeof TextEncoder === 'undefined') {
+            // 或者使用 CDN 引入：https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
+            const crypto = require('crypto-js');
+        } else {
+            const crypto = window.crypto; // 使用浏览器的 Crypto API
+        }
+
+        function generateSignature(method, endpoint, params) {
+            // 按字母排序参数
+            const query = Object.keys(params)
+                .sort()
+                .map(k => `${k}=${params[k]}`)
+                .join('&');
+            // 生成签名字符串
+            const strToSign = `${method}${endpoint}${query}`;
+            // 使用私钥进行签名（HMAC-SHA256）
+            const signature = crypto.createSign('sha256')
+                .update(strToSign)
+                .sign(PRIVATE_KEY, 'binary')
+                .toString('hex');
+            return signature;
+        }
+
+        function getWeather(lat, lon) {
+            const endpoint = '/v3/weather/current.json';
+            const params = {
+                location: `${lon},${lat}` // 注意，心知天气的经纬度顺序是经度,纬度
+            };
+            const method = 'GET';
+
+            // 生成签名
+            const signature = generateSignature(method, endpoint, params);
+
+            // 发送请求
+            fetch(`https://api.seniverse.com${endpoint}?key=${PUBLIC_KEY}&signature=${signature}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        const weatherIcon = document.getElementById('weather-icon');
+                        const weatherState = document.getElementById('weather-state');
+                        const temperature = document.getElementById('temperature');
+                        const loading = document.getElementById('loading');
+                        loading.style.display = 'none';
+
+                        // 设置天气图标
+                        const icon = data.result.icon;
+                        const iconUrl = `https://cdn.seniverse.com/vector/sky-icons/2.0/80/${icon}/@2x.png`;
+                        weatherIcon.src = iconUrl;
+
+                        // 设置天气状态和温度
+                        weatherState.textContent = data.result.weather.status;
+                        temperature.textContent = `${Math.round(data.result.weather.temperature)}°C`;
+                    } else {
+                        console.error('获取天气失败:', data.message);
+                        const loading = document.getElementById('loading');
+                        loading.style.display = 'none';
+                        alert('无法获取天气信息，请检查网络连接');
+                    }
+                })
+                .catch(error => {
+                    console.error('获取天气失败:', error);
+                    const loading = document.getElementById('loading');
+                    loading.style.display = 'none';
+                    alert('无法获取天气信息，请检查网络连接');
+                });
+        }
+
+        // 获取地理位置
+        function getWeatherByLocation() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        getWeather(latitude, longitude);
+                    },
+                    error => {
+                        console.error('地理位置获取失败:', error);
+                        loading.style.display = 'none';
+                        alert('无法获取位置信息，请允许地理位置权限');
+                        // 如果不支持地理位置，可以尝试使用默认城市
+                        getWeatherByCity('宜宾');
+                    }
+                );
+            } else {
+                alert('浏览器不支持地理位置功能');
+                loading.style.display = 'none';
+                // 如果不支持地理位置，可以尝试使用默认城市
+                getWeatherByCity('宜宾');
+            }
+        }
+
+        // 支持城市名称查询的函数
+        function getWeatherByCity(city) {
+            const endpoint = '/v3/weather/current.json';
+            const params = {
+                location: city
+            };
+            const method = 'GET';
+
+            const signature = generateSignature(method, endpoint, params);
+
+            fetch(`https://api.seniverse.com${endpoint}?key=${PUBLIC_KEY}&signature=${signature}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        const weatherIcon = document.getElementById('weather-icon');
+                        const weatherState = document.getElementById('weather-state');
+                        const temperature = document.getElementById('temperature');
+                        const loading = document.getElementById('loading');
+                        loading.style.display = 'none';
+
+                        // 设置天气图标
+                        const icon = data.result.icon;
+                        const iconUrl = `https://cdn.seniverse.com/vector/sky-icons/2.0/80/${icon}/@2x.png`;
+                        weatherIcon.src = iconUrl;
+
+                        // 设置天气状态和温度
+                        weatherState.textContent = data.result.weather.status;
+                        temperature.textContent = `${Math.round(data.result.weather.temperature)}°C`;
+                    } else {
+                        console.error('获取天气失败:', data.message);
+                        const loading = document.getElementById('loading');
+                        loading.style.display = 'none';
+                        alert('无法获取天气信息，请检查网络连接');
+                    }
+                })
+                .catch(error => {
+                    console.error('获取天气失败:', error);
+                    const loading = document.getElementById('loading');
+                    loading.style.display = 'none';
+                    alert('无法获取天气信息，请检查网络连接');
+                });
+        }
+
+        // 获取天气数据
+        getWeatherByLocation();
+
+        // 测试默认城市（如果需要）
+        // getWeatherByCity('宜宾');
+    </script>
+</body>
+</html>

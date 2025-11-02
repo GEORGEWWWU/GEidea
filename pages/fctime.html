@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="short icon" href="./geid.png">
+    <link rel="stylesheet" href="./libs/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/fctime.css">
+    <title>GE简主义</title>
+</head>
+<body>
+
+    <!--大标题-->
+    <div class="index-title"><h1>番茄时钟 | </h1><img src="./geid.png"><h1>GE简主义</h1><span>Beta</span></div>
+
+    <!--选择专注模式-->
+    <div class="fctime-select">
+        <div class="ft-list">
+            <div class="custom-select" id="focusModeSelect">
+                <div class="selected">个人</div>
+                <div class="items">
+                    <div class="item" data-value="25">个人</div>
+                    <div class="item" data-value="25">学习</div>
+                    <div class="item" data-value="25">工作</div>
+                    <div class="item" data-value="30">番茄休息</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--倒计时数字-->
+    <div class="fctime">
+        <h1 id="countdown">25:00</h1>
+        <span id="progressBar"></span>
+    </div>
+    <!--开始/暂停button-->
+    <div class="fctime-button">
+        <button id="startButton">开始专注</button>
+        <i class="fa fa-refresh" id="refreshButton"></i>
+    </div>
+    
+</body>
+<script src="./render.js"></script>
+<script>
+// 设置默认倒计时时间为25分钟
+let countdownTime = 25 * 60;
+let timerInterval;
+
+// 获取倒计时显示元素和按钮
+const countdownElement = document.getElementById('countdown');
+const startButton = document.getElementById('startButton');
+const progressBar = document.getElementById('progressBar'); // 获取进度条元素
+
+// 获取专注模式选择元素
+const focusModeSelect = document.getElementById('focusModeSelect');
+
+// 更新倒计时时间根据选择的专注模式
+focusModeSelect.addEventListener('click', (event) => {
+    const target = event.target;
+    if (target.classList.contains('item')) {
+        const selected = focusModeSelect.querySelector('.selected');
+        selected.textContent = target.textContent;
+        countdownTime = parseInt(target.getAttribute('data-value')) * 60;
+        updateCountdown();
+        focusModeSelect.classList.remove('open');
+    }
+});
+
+// 打开/关闭自定义下拉菜单
+focusModeSelect.addEventListener('click', () => {
+    focusModeSelect.classList.toggle('open');
+});
+
+// 更新倒计时显示
+function updateCountdown() {
+    const minutes = Math.floor(countdownTime / 60);
+    const seconds = countdownTime % 60;
+    countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    updateProgressBar(); // 更新进度条
+}
+
+// 更新进度条
+function updateProgressBar() {
+    const percentage = (countdownTime / (25 * 60)) * 100;
+    progressBar.style.width = `${percentage}%`;
+}
+
+// 开始倒计时
+function startCountdown() {
+    progressBar.style.display = 'block'; // 显示进度条
+    countdownElement.classList.add('small-font'); // 添加字体变小的样式
+    timerInterval = setInterval(() => {
+        countdownTime--;
+        if (countdownTime < 0) {
+            clearInterval(timerInterval);
+            countdownTime = 25 * 60; // 重置倒计时时间为25分钟
+            startButton.textContent = '开始专注'; // 恢复按钮文本
+            progressBar.style.display = 'none'; // 隐藏进度条
+            countdownElement.classList.remove('small-font'); // 移除字体变小的样式
+            updateProgressBar(); // 重置进度条
+        }
+        updateCountdown();
+    }, 1000);
+}
+
+// 绑定按钮点击事件
+startButton.addEventListener('click', () => {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        startButton.textContent = '开始专注'; // 恢复按钮文本
+        progressBar.style.display = 'none'; // 隐藏进度条
+        countdownElement.classList.remove('small-font'); // 移除字体变小的样式
+    } else {
+        updateCountdown(); // 更新显示
+        startCountdown(); // 开始新的倒计时
+        startButton.textContent = '暂停'; // 改变按钮文本为暂停
+    }
+});
+
+// 获取刷新按钮元素
+const refreshButton = document.getElementById('refreshButton');
+
+// 添加刷新按钮点击事件监听器
+refreshButton.addEventListener('click', () => {
+    location.reload();
+});
+
+// 初始化显示
+updateCountdown();
+progressBar.style.display = 'none'; // 初始化进度条为隐藏状态
+
+</script>
+</html>

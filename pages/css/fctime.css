@@ -1,0 +1,252 @@
+* {
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-family: 'fz-ios';
+}
+
+/* 隐藏滚动条 */
+::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    width: 800px;
+    height: 550px;
+    display: grid;
+    justify-items: center;
+    align-content: flex-start;
+    background: #000000df;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+
+
+
+
+
+
+.index-title {
+    width: 100%;
+    height: 150px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.index-title h1 {
+    font-size: 28px;
+    color: #c7c7c7;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.index-title img {
+    width: 35px;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.index-title span {
+    position: fixed;
+    transform: translateX(170px) translateY(-6px);
+    font-size: 9px;
+    color: #e66d1c;
+    padding: 0px 3px;
+    border-radius: 3px;
+    border-style: solid;
+    border-color: #e66d1c;
+    border-width: 1px;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+
+
+
+
+
+
+
+
+.fctime-select {
+    width: 100%;
+    height: 60px;
+    display: grid;
+    justify-items: center;
+    align-items: flex-end;
+    z-index: 9999;
+}
+
+.ft-list {
+    width: auto;
+    height: auto;
+    transform: translateY(-5px);
+    z-index: 9999;
+}
+
+.custom-select {
+    position: relative;
+    width: 100px;
+    cursor: pointer;
+    z-index: 9999;
+}
+
+.custom-select .selected {
+    background: none;
+    color: #eedcd19e;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 10px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    user-select: none;
+    z-index: 9999;
+}
+
+.custom-select .items {
+    display: none;
+    position: absolute;
+    background: none;
+    color: #b16b43;
+    border-radius: 4px;
+    width: 100px;
+    z-index: 9999;
+    justify-items: center;
+}
+
+.custom-select.open .items {
+    display: grid;
+    gap: 2px;
+    background: #b16b434c;
+    backdrop-filter: blur(6px);
+    animation: slcopitems 0.4s ease forwards;
+    z-index: 9999;
+}
+
+@keyframes slcopitems {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+.custom-select .item {
+    width: 95px;
+    height: 38px;
+    color: #b16b43;
+    line-height: 25px;
+    list-style: none;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    user-select: none;
+    z-index: 9999;
+}
+
+.custom-select .item:hover {
+    color: #e46217;
+}
+
+
+
+
+
+
+
+
+
+.fctime {
+    width: 350px;
+    height: 80px;
+    display: grid;
+    justify-items: center;
+    align-content: flex-end;
+    z-index: 0;
+}
+
+.fctime h1 {
+    font-size: 50px;
+    color: #cdcdcdc9;
+    user-select: none;
+    transition: all 0.8s ease 0s;
+    z-index: 0;
+}
+
+.fctime h1.small-font {
+    color: #b16b43;
+    font-size: 65px; /* 新增字体变小的样式 */
+    transform: translateY(15px);
+    z-index: 0;
+}
+
+#progressBar {
+    display: block;
+    width: 100%;
+    height: 7px;
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 20px;
+    display: none; /* 初始状态为隐藏 */
+    animation: processshow 0.8s ease 0s;
+}
+
+@keyframes processshow {
+    0% {
+        transform: translateY(15px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
+#progressBar::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: #b16b43;
+    transition: width 1s;
+}
+
+.fctime-button {
+    width: 400px;
+    height: auto;
+    display: grid;
+    justify-items: center;
+    align-items: flex-start;
+}
+
+.fctime-button button {
+    width: 90px;
+    height: 35px;
+    border-radius: 4px;
+    margin-top: 50px;
+    background: #b16b43;
+    cursor: pointer;
+    color: #702f09;
+    transition: all 0.2s ease 0s;
+}
+
+.fctime-button button:active {
+    transform: scale(0.95);
+}
+
+.fctime-button i {
+    font-size: 14px;
+    color: #b16b43;
+    position: fixed;
+    transform: translateY(60px) translateX(70px);
+    cursor: pointer;
+}

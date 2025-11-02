@@ -1,0 +1,53 @@
+* {
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-family: 'fz-ios';
+}
+
+/* 隐藏滚动条 */
+::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    width: 250px;
+    height: 250px;
+    display: grid;
+    justify-items: center;
+    align-content: flex-start;
+    background: #1b1b1b;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.weather-container {
+    width: 250px;
+    text-align: center;
+    padding: 10px;
+}
+
+.weather-icon {
+    width: 70px;
+    margin: 0 auto 10px;
+    border-radius: 50%;
+}
+
+.weather-info {
+    color: #666;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.weather-temp {
+    font-size: 28px;
+    color: #c0c0c0;
+}
+
+.loading {
+    display: none;
+    text-align: center;
+    color: #666;
+    font-size: 12px;
+}

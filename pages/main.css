@@ -1,0 +1,191 @@
+* {
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-family: 'fz-ios';
+}
+
+/* 隐藏滚动条 */
+::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    width: 100%;
+    height: 600px;
+    display: grid;
+    justify-items: center;
+    align-content: flex-start;
+    background-color: #171717c1;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.index-title {
+    width: 100%;
+    height: 220px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.index-title h1 {
+    font-size: 28px;
+    color: #c7c7c7;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.index-title img {
+    width: 35px;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.index-title span {
+    position: fixed;
+    transform: translateX(160px) translateY(-6px);
+    font-size: 9px;
+    color: #e66d1c;
+    padding: 0px 3px;
+    border-radius: 3px;
+    border-style: solid;
+    border-color: #e66d1c;
+    border-width: 1px;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+
+
+
+
+
+
+section {
+    width: 45%;
+    height: 35px;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    border-bottom-style: solid;
+    border-color: #969696;
+    border-width: 1px;
+}
+
+section h1 {
+    font-size: 14px;
+    color: #969696;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+
+
+
+
+
+
+main {
+    width: 45%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+main button {
+    width: 55px;
+    height: 55px;
+    background: none;
+    cursor: default;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    border-radius: 4px;
+    transition: all 0.1s ease 0s;
+}
+
+main button:hover {
+    background: #2c2c2cc1;
+}
+
+main button:active {
+    transform: scale(0.96);
+}
+
+main button img {
+    width: 40px;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+main button p {
+    position: fixed;
+    color: #a8a8a8;
+    user-select: none;
+    transform: translateY(45px);
+    display: none;
+    animation: mainbtnp 0.3s ease forwards;
+}
+
+main button:hover p {
+    display: grid;
+}
+
+@keyframes mainbtnp {
+    0% {
+        opacity: 0.3;
+        transform: translateY(38px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(45px);
+    }
+}
+
+
+
+
+
+
+
+.ft-inf {
+    width: 100%;
+    height: auto;
+    display: grid;
+    justify-items: right;
+    align-items: center;
+    position: fixed;
+    bottom: 10px;
+    background: none;
+    z-index: 9999;
+}
+
+.ft-inf a {
+    text-decoration: none;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    background: none;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.ft-inf a i {
+    color: #e2e2e24a;
+    font-size: 22px;
+    transition: all 0.1s ease 0s;
+}
+
+.ft-inf a i:hover {
+    color: #e6e6e69c;
+}
+

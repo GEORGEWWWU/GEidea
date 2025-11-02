@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="short icon" href="./geid.png">
+    <link rel="stylesheet" href="./libs/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/day.css">
+    <title>GE简主义</title>
+</head>
+<body>
+    
+    <!--倒数日-->
+    <div class="ctn">
+        <h1>倒数日</h1>
+        <div class="ctn-alive"><p>已经来到这个世界上</p><span id="daysAlive"></span><p>天</p></div>
+        <div class="ctn-birthday"><p>距离20岁生日还有</p><span id="daysUntilBirthday"></span><p>天</p></div>
+        <div class="ctn-2026"><p>距离2026年还有</p><span id="daysUntil2026"></span><p>天</p></div>
+    </div>
+    
+    <script>
+        function updateDaysUntil2026() {
+            const targetDate = new Date('2026-01-01');
+            const currentDate = new Date();
+            const timeDifference = targetDate - currentDate;
+            const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+            document.getElementById('daysUntil2026').textContent = daysDifference;
+        }
+
+        function updateDaysUntilBirthday() {
+            const birthDate = new Date();
+            birthDate.setMonth(9, 28); // Set to October 28th of the current year
+            const currentDate = new Date();
+            if (birthDate < currentDate) {
+                birthDate.setFullYear(birthDate.getFullYear() + 1); // If birthday has passed, set to next year
+            }
+            const timeDifference = birthDate - currentDate;
+            const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+            document.getElementById('daysUntilBirthday').textContent = daysDifference;
+        }
+
+        function updateDaysAlive() {
+            const birthDate = new Date('2005-10-28');
+            const currentDate = new Date();
+            const timeDifference = currentDate - birthDate;
+            const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+            document.getElementById('daysAlive').textContent = daysDifference;
+        }
+
+        updateDaysUntil2026(); // Initial call to display the days immediately
+        setInterval(updateDaysUntil2026, 24 * 60 * 60 * 1000); // Update every 24 hours
+
+        updateDaysUntilBirthday(); // Initial call to display the days immediately
+        setInterval(updateDaysUntilBirthday, 24 * 60 * 60 * 1000); // Update every 24 hours
+
+        updateDaysAlive(); // Initial call to display the days immediately
+        setInterval(updateDaysAlive, 24 * 60 * 60 * 1000); // Update every 24 hours
+    </script>
+</body>
+</html>

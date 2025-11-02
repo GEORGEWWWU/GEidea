@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="short icon" href="./geid.png">
+    <link rel="stylesheet" href="./libs/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/cld.css">
+    <title>GE简主义</title>
+</head>
+<body>
+
+    <!--日历组件-->
+    <div class="calendar">
+        <div class="calendar-header">
+            <button class="prev-month"><i class="fa fa-angle-left"></i></button>
+            <div class="current-month-year">
+                <span id="current-month"></span>
+                <span id="current-year"></span>
+            </div>
+            <button class="next-month"><i class="fa fa-angle-right"></i></button>
+            <i class="fa fa-bars"></i>
+        </div>
+        <div class="calendar-body">
+            <div class="calendar-weekdays">
+                <div>日</div>
+                <div>一</div>
+                <div>二</div>
+                <div>三</div>
+                <div>四</div>
+                <div>五</div>
+                <div>六</div>
+            </div>
+            <div class="calendar-dates" id="calendar-dates">
+                <!-- 日期将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加日程弹窗模板 -->
+    <div class="calendar-box-template" style="display: none;">
+        <h1><button class="add-event-toggle"><i class="fa fa-plus"></i></button>日程列表<i class="fa fa-close close-calendar-box"></i><i class="fa fa-refresh refresh"></i></h1>
+        <div class="cld-list">
+            <!-- 事件列表将通过JavaScript动态生成 -->
+        </div>
+        <!-- 添加输入框和确认按钮，并设置初始状态为隐藏 -->
+        <div class="cld-addinput">
+            <input type="text" class="new-event-input" placeholder="输入新的日程事件" style="display: none;">
+            <button class="add-event-button" style="display: none;">完成</button>
+        </div>
+    </div>
+
+    <script>
+        
+
+        // 获取当前日期
+        const currentDate = new Date();
+        let currentYear = currentDate.getFullYear();
+        let currentMonth = currentDate.getMonth();
+        const today = currentDate.getDate(); // 获取当前日期
+
+        // 月份数组
+        const monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
+
+        // 设置当前年份和月份
+        function updateCalendar() {
+            document.getElementById('current-year').textContent = currentYear;
+            document.getElementById('current-month').textContent = monthNames[currentMonth];
+            generateCalendarDates();
+        }
+
+        // 生成日历日期
+        function generateCalendarDates() {
+            const calendarDates = document.getElementById('calendar-dates');
+            calendarDates.innerHTML = ''; // 清空之前的日期
+
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay(); // 获取当月第一天是星期几
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate(); // 获取当月总天数
+
+            // 添加空白格以对齐第一天
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDiv = document.createElement('div');
+                calendarDates.appendChild(emptyDiv);
+            }
+
+            // 添加日期
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateDiv = document.createElement('div');
+                dateDiv.textContent = day;
+                if (day === today && currentYear === currentDate.getFullYear() && currentMonth === currentDate.getMonth()) {
+                    dateDiv.classList.add('today'); // 添加今日日期的样式
+                }
+
+                // 读取该日期的日程事件数量
+                const events = JSON.parse(localStorage.getItem(`events-${currentYear}-${currentMonth + 1}-${day}`)) || [];
+                if (events.length > 0) {
+                    const eventCountSpan = document.createElement('span');
+                    eventCountSpan.textContent = ` ${events.length}个日程`; // 修改显示格式
+                    dateDiv.appendChild(eventCountSpan);
+                }
+
+                // 添加点击事件以显示 calendar-box
+                dateDiv.addEventListener('click', () => {
+                    showCalendarBox(day);
+                });
+                calendarDates.appendChild(dateDiv);
+            }
+        }
+
+        // 显示日程弹窗
+        function showCalendarBox(day) {
+            const calendarBoxTemplate = document.querySelector('.calendar-box-template');
+            const calendarBox = calendarBoxTemplate.cloneNode(true);
+            calendarBox.id = `calendar-box-${day}`;
+            calendarBox.style.display = 'block';
+
+            // 设置关闭按钮事件
+            calendarBox.querySelector('.close-calendar-box').addEventListener('click', () => {
+                calendarBox.remove();
+            });
+
+            // 设置刷新按钮事件
+            calendarBox.querySelector('.refresh').addEventListener('click', () => {
+                location.reload();
+            });
+
+            // 加载该日期的事件
+            loadEvents(day, calendarBox);
+
+            // 设置添加事件按钮事件
+            calendarBox.querySelector('.add-event-toggle').addEventListener('click', () => {
+                const eventInput = calendarBox.querySelector('.new-event-input');
+                const addButton = calendarBox.querySelector('.add-event-button');
+                eventInput.style.display = eventInput.style.display === 'none' ? 'block' : 'none';
+                addButton.style.display = addButton.style.display === 'none' ? 'block' : 'none';
+            });
+
+            // 设置添加事件按钮事件
+            calendarBox.querySelector('.add-event-button').addEventListener('click', () => {
+                const eventInput = calendarBox.querySelector('.new-event-input');
+                const eventText = eventInput.value.trim();
+                if (eventText) {
+                    addEvent(day, eventText);
+                    const cldList = calendarBox.querySelector('.cld-list');
+                    const newEventDiv = document.createElement('div');
+                    newEventDiv.className = 'cldls';
+                    newEventDiv.innerHTML = `<p>${eventText}</p><button class="delete-event">删除</button>`;
+                    cldList.appendChild(newEventDiv);
+                    eventInput.value = ''; // 清空输入框
+
+                    // 添加删除事件按钮点击事件
+                    newEventDiv.querySelector('.delete-event').addEventListener('click', () => {
+                        removeEvent(day, eventText);
+                        newEventDiv.remove();
+                    });
+                }
+            });
+
+            document.body.appendChild(calendarBox);
+        }
+
+        // 从 localStorage 加载事件
+        function loadEvents(day, calendarBox) {
+            const events = JSON.parse(localStorage.getItem(`events-${currentYear}-${currentMonth + 1}-${day}`)) || [];
+            const cldList = calendarBox.querySelector('.cld-list');
+            cldList.innerHTML = ''; // 清空现有事件
+            events.forEach(eventText => {
+                const newEventDiv = document.createElement('div');
+                newEventDiv.className = 'cldls';
+                newEventDiv.innerHTML = `<p>${eventText}</p><button class="delete-event">删除</button>`;
+                cldList.appendChild(newEventDiv);
+
+                // 添加删除事件按钮点击事件
+                newEventDiv.querySelector('.delete-event').addEventListener('click', () => {
+                    removeEvent(day, eventText);
+                    newEventDiv.remove();
+                    // 更新日期元素上的日程数量
+                    updateDateEventCount(day);
+                });
+            });
+        }
+
+        // 添加事件到 localStorage
+        function addEvent(day, eventText) {
+            let events = JSON.parse(localStorage.getItem(`events-${currentYear}-${currentMonth + 1}-${day}`)) || [];
+            events.push(eventText);
+            localStorage.setItem(`events-${currentYear}-${currentMonth + 1}-${day}`, JSON.stringify(events));
+            // 更新日期元素上的日程数量
+            updateDateEventCount(day);
+        }
+
+        // 从 localStorage 删除事件
+        function removeEvent(day, eventText) {
+            let events = JSON.parse(localStorage.getItem(`events-${currentYear}-${currentMonth + 1}-${day}`)) || [];
+            events = events.filter(event => event !== eventText);
+            localStorage.setItem(`events-${currentYear}-${currentMonth + 1}-${day}`, JSON.stringify(events));
+        }
+
+        // 更新日期元素上的日程数量
+        function updateDateEventCount(day) {
+            const dateDiv = document.querySelector(`#calendar-dates div:nth-child(${day + new Date(currentYear, currentMonth, 1).getDay()})`);
+            const events = JSON.parse(localStorage.getItem(`events-${currentYear}-${currentMonth + 1}-${day}`)) || [];
+            const eventCountSpan = dateDiv.querySelector('span');
+            if (events.length > 0) {
+                if (eventCountSpan) {
+                    eventCountSpan.textContent = ` ${events.length}个日程`; // 修改显示格式
+                } else {
+                    const newEventCountSpan = document.createElement('span');
+                    newEventCountSpan.textContent = ` ${events.length}个日程`; // 修改显示格式
+                    dateDiv.appendChild(newEventCountSpan);
+                }
+            } else {
+                if (eventCountSpan) {
+                    eventCountSpan.remove();
+                }
+            }
+        }
+
+        // 初始化日历
+        updateCalendar();
+
+        // 上个月按钮点击事件
+        document.querySelector('.prev-month').addEventListener('click', () => {
+            if (currentMonth === 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else {
+                currentMonth--;
+            }
+            updateCalendar();
+        });
+
+        // 下个月按钮点击事件
+        document.querySelector('.next-month').addEventListener('click', () => {
+            if (currentMonth === 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else {
+                currentMonth++;
+            }
+            updateCalendar();
+        });
+    </script>
+
+</body>
+<script src="./render.js"></script>
+</html>
